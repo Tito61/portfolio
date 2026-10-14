@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Incident Report — Synthetic Demo</title>
+<style>
+  :root{--bg:#F3F5F7;--text:#0F1620;--dim:#5B6572;--border:#DCE1E6;--accent:#8F5D14;--code:#EBEEF1}
+  @media (prefers-color-scheme:dark){:root{--bg:#0B0F14;--text:#E7EAEE;--dim:#96A2B0;--border:#212B37;--accent:#F3B65C;--code:#121821}}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  main{max-width:860px;margin:0 auto;padding:32px 24px 64px}
+  a{color:var(--accent)} h1,h2,h3{font-family:ui-monospace,Menlo,Consolas,monospace;text-wrap:balance}
+  blockquote{margin:0 0 24px;padding:12px 16px;border:1px solid var(--border);background:var(--code);color:var(--dim);border-radius:6px}
+  .scroll{overflow-x:auto} table{border-collapse:collapse;font-size:.9rem;width:100%}
+  th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--code)}
+  code{background:var(--code);padding:1px 5px;border-radius:3px;font-size:.88em}
+  hr{border:0;border-top:1px solid var(--border);margin:32px 0}
+  .back{font-family:ui-monospace,Menlo,monospace;font-size:.85rem}
+</style>
+</head>
+<body>
+<main>
+  <p class="back"><a href="index.html">← back to portfolio</a></p>
+  <div id="content">Loading…</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+  const md = await (await fetch("incident-report-demo.md")).text();
+  const el = document.getElementById("content");
+  el.innerHTML = marked.parse(md.replace(/<!--[\s\S]*?-->/, ""));
+  el.querySelectorAll("table").forEach(t => { const w = document.createElement("div"); w.className = "scroll"; t.replaceWith(w); w.append(t); });
+  el.querySelectorAll("pre > code.language-mermaid").forEach(c => { const d = document.createElement("div"); d.className = "mermaid"; d.textContent = c.textContent; c.parentElement.replaceWith(d); });
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  mermaid.initialize({ startOnLoad: false, theme: dark ? "dark" : "default" });
+  await mermaid.run();
+</script>
+</body>
+</html>
